@@ -1,0 +1,30 @@
+.hivepage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .hivepage-container{
+        max-width: 1200px;
+        .hivepage-left{
+            .hive-image-section{
+                display: flex;
+                justify-content: center;
+                position: relative;
+                z-index: 2;
+                .hexagon-number{
+                    // font-style: italic;
+                    position: absolute;
+                    color: white;
+                    text-transform: uppercase;
+                    line-height: 0.876;
+                    text-align: center;
+                    font-size: 160px;
+                    left: 50%;
+                    // top: %;
+                    transform: translate(-50%, -50%);
+                    z-index: 3;
+                }
+            }
+        }
+    }
+}

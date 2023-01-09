@@ -1,0 +1,292 @@
+#root {
+  $coin-color: #E1A900;
+  $bg-color: #2c2a00;
+  $viewbase-bg-color: #222114;
+  $btn-active-color: #E1A90022;
+  $faq-bg-color: #2c2a00bb;
+}
+
+.hive-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-width: 250px;
+    // max-width: 350px;
+
+    position: relative;
+    z-index: 2;
+    
+    @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+      background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(100px);
+    }
+  
+    /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
+    @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+      background: #181B1C;
+    }
+
+    border-radius: 10px;
+    padding: 26px 0;
+
+    .owner-badge{
+      position: fixed;
+      right: 39px;
+      top: 39px;
+    }
+
+    .card-top{
+      cursor: pointer;
+      .hexagon-number{
+        // font-style: italic;
+        position: absolute;
+        color: white;
+        text-transform: uppercase;
+        line-height: 0.876;
+        text-align: center;
+        font-size: 80px;
+        left: 50%;
+        top: 4%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+      }
+    }
+
+    .card-info-1{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background: url(../../assets/images/box-1.png) no-repeat;
+      background-size: contain;
+      margin-top: 30px;
+      width: 275px;
+      height: 282px;
+      .card-btn-join{
+        margin-top: -19px;
+      }
+      .card-btn-join-text{
+        position: absolute;
+        text-transform: uppercase;
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        color: #333;
+        left: 103px;
+        top: 170px;
+        margin: 10px 0;
+      }
+      .card-btn-attack-text{
+        position: absolute;
+        text-transform: uppercase;
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        color: rgba(255, 166, 0, 0.94);
+        left: 83px;
+        top: 223px;
+        margin: 10px 0;
+      }
+      .card-health-text{
+        text-transform: uppercase;
+        line-height: 0.876;
+        color: #6666;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        margin: 10px 0;
+      }
+      .card-defenders-number-text{
+        position: absolute;
+        text-transform: uppercase;
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        top: 385px;
+        color: rgba(255, 166, 0, 0.94);;
+        margin: 10px 0;
+      }
+      .card-defenders-text{
+        position: absolute;
+        text-transform: uppercase;
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        top: 428px;
+        color: #6666;
+        margin: 10px 0;
+      }
+      .card-health-progress{
+        position: absolute;
+        top: 334px;
+        margin-left: 74px;
+      }
+    }
+
+    .card-info-2{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background: url(../../assets/images/box-2.png) no-repeat;
+      background-size: contain;
+      margin-top: 30px;
+      width: 275px;
+      height: 130px;
+      .card-nectar-text{
+        color: rgba(255, 166, 0, 0.94);
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        margin: -10px 0 -40px;
+      }
+      .card-btn-contribute{
+        margin: -38px 0 13px;
+      }
+      .card-contribute-nf-text{
+        position: absolute;
+        text-transform: uppercase;
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        left: 45px;
+        top: 573px;
+        color: #333;
+        margin: 10px 0;
+      }
+      .card-toxic-text{
+        color: rgba(255, 166, 0, 0.94);
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        margin: -20px 0 -40px;
+      }
+      .card-forcefield-text{
+        color: rgba(255, 166, 0, 0.94);
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        margin: -5px 0 -40px;
+      }
+      .card-contribute-tf-text{
+        position: absolute;
+        text-transform: uppercase;
+        line-height: 0.876;
+        font-family: sans-serif;
+        text-align: center;
+        font-size: 28px;
+        left: 45px;
+        top: 733px;
+        color: #333;
+        margin: 10px 0;
+      }
+      .card-toxic-progress{
+        position: absolute;
+        top: 691px;
+        margin-left: 74px;
+      }
+      .card-nectar-progress{
+        position: absolute;
+        top: 526px;
+        margin-left: 74px;
+      }
+    }
+
+    .card-title {
+      font-family: Montserrat Medium;
+      font-weight: 500;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      .MuiTypography-colorPrimary {
+        color: white;
+      }
+    }
+
+    .card-opensea-link {
+      font-family: Montserrat Medium;
+      font-weight: 500;
+      font-size: 16px;
+      margin-top: 30px;
+      color: rgb(83, 255, 60);
+      text-align: center;
+    }
+
+    .card-tier {
+        font-family: Montserrat Medium;
+        font-weight: 500;
+        font-size: 16px;
+        color: rgba(255, 255, 255, 1);
+      }
+
+    .card-name-wrap{
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      .card-name-text {
+        font-family: Montserrat Medium;
+        font-weight: 500;
+        font-size: 24px;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 1);
+        text-align: left;
+      }
+      .card-copylink{
+        display: flex;
+        align-items: center;
+        margin-left: 30px;
+        position: fixed;
+        right: 20px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #ffffff55;
+        cursor: pointer;
+        // top: 39px;
+        &:hover{
+          background-color: #ffffff33;
+        }
+        &:active{
+          background-color: #ffffff11;
+        }
+      }
+    }
+    
+    
+
+    .dapp-topbar-btns-wrap{
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        // width: 100%;
+      }
+    
+    .dapp-topbar-btns-wrap-full{
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        width: 100%;
+        justify-content: center;
+        div {
+          width: 60%;
+          margin-left: 20px;
+          justify-content: center;
+        }
+      }
+
+    .card-value {
+      font-family: Montserrat Bold;
+    //   font-weight: bold;
+      font-size: 14px;
+      color: #FFFFFF;
+      padding-bottom: 20px !important; 
+    }
+  }

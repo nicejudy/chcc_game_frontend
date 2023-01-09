@@ -1,0 +1,84 @@
+.view-base-root {
+    height: 100vh;
+    // width: 100vw;
+    display: flex;
+    flex-direction: column;
+    // background: #001a0f;
+    // background-color: rgsb(1, 50, 31);
+    // background-image: url("../../assets/images/hornet_vs_anim_art.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    img {
+        position: relative;
+        // width: 100%;
+    }
+
+    .view-base-header{
+        // height: 50px !important;
+        width: 100%;
+        padding: 10px;
+        background: #4eb363;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        position: fixed;
+        p{
+            font-family: Montserrat Medium;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            color: #FFFFFF;
+            a{
+                color: #e5f04c;
+            }
+        }
+    }
+
+    .view-video-section{
+        .view-video-widget{
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: 0;
+        }
+    }
+
+    .cubes-top {
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+
+        p {
+            font-family: Courier;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            color: #FFFFFF;
+            white-space: pre-wrap;
+            user-select: none;
+        }
+    }
+
+
+    .cubes-bottom {
+        opacity: 1;
+        position: absolute;
+        bottom: 10px;
+        right: 50px;
+
+        p {
+            font-family: Courier;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            color: #FFFFFF;
+            white-space: pre-wrap;
+            user-select: none;
+        }
+    }
+}
