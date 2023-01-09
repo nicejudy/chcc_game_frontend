@@ -7,6 +7,7 @@ function Loader() {
     return (
         <div className="loader-wrap">
             {/* <img src={GifIcon} width="100" /> */}
+            <CircularProgress size={120} color="inherit" />
         </div>
     );
 }
