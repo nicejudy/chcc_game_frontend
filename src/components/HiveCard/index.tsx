@@ -84,8 +84,6 @@ function HiveCard({ hiveId, hiveInfo, hornetsInfo }: IHiveCardProps) {
     const handleOpenHiveModal = async () => {
         const hiveDayInfo_temp = await loadHiveDayDetails({ networkID: Networks.ETH, id: hiveId.toString() });
         const myHornets_temp = !isAccountLoading? await loadHornetsDetails({networkID: chainID, provider, ids: userInfo[hiveId].hornets}) : [];
-        console.log(userInfo[hiveId].hornets)
-        console.log(today)
         const myHornetsStatus_temp = !isAccountLoading? await loadHornetsStatus({networkID: chainID, provider, ids: userInfo[hiveId].hornets, day: today}) : [];
         setHiveDayInfo(hiveDayInfo_temp);
         setMyHornets(myHornets_temp);

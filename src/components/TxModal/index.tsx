@@ -96,7 +96,6 @@ function TxModal({ open, handleClose, filter, hid }: ITxProps) {
     const loadInvaderInfo = async (ins: number) => {
         setLoading(true);
         const data = await loadInvaderInfoDetails({networkID: chainID, ids: [ins], provider});
-        console.log(0)
         setInviderInfo(data.invaderInfos);
         const passed = Math.floor(Date.now() / 1000) - data.invaderInfos[0].lastProcessingTime;
         if (data.invaderInfos[0].status == 0) {

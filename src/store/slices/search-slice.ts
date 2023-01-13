@@ -115,8 +115,6 @@ export const loadHiveDayDetails = async ({networkID, id}: ILoadHiveDayDetails) :
         hiveDayInfos.push(hiveDayInfos_temp[i][0]);
     }
 
-    console.log(hiveDayInfos)
-
     return hiveDayInfos;
 }
 
@@ -178,11 +176,7 @@ export const loadInvaderInfoDetails = async ({ networkID, ids, provider }: ILoad
         });
     }
 
-    console.log(calls_InvaderInfo)
-
     const invaderInfos_temp = await multicall(HiveContract, calls_InvaderInfo);
-
-    console.log(1234)
 
     let invaderInfos = [];
 

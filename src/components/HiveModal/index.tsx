@@ -77,7 +77,6 @@ function HiveModal({ open, handleClose, hid, dayInfo, myHornets, myHornetsStatus
     };
 
     // const hornets = !isAccountLoading && loadHornetsDetails({networkID: chainID, provider, ids: userInfo[parseInt(hid)].hornets}) as unknown as IHornet[];
-    // console.log(hornets)
 
     // let workers = [];
     // let guarders = [];
@@ -90,8 +89,6 @@ function HiveModal({ open, handleClose, hid, dayInfo, myHornets, myHornetsStatus
     const passed = Math.floor((Math.floor(Date.now() / 1000) - hiveInfo.startTime) / 86400);
 
     // const today = passed == 0? 0 : passed - 1;
-
-    console.log(dayInfo[passed])
 
     return (
         <Modal id="hades" open={open} onClose={handleClose} hideBackdrop>
