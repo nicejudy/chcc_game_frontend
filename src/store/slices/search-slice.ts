@@ -48,9 +48,39 @@ export const loadHornetsDetails = async ({ networkID, provider, ids }: ILoadHorn
         hornetInfos.push(hornetInfos_temp[i][0]);
     }
 
-    return {
-        hornetInfos: hornetInfos,
-    };
+    return hornetInfos;
+};
+
+interface ILoadHornetsStatus {
+    ids: number[];
+    day: number;
+    networkID: Networks;
+    provider: StaticJsonRpcProvider | JsonRpcProvider;
+}
+
+export const loadHornetsStatus = async ({ networkID, provider, ids, day }: ILoadHornetsStatus) => {
+    const addresses = getAddresses(networkID);
+
+    const hiveContract = new ethers.Contract(addresses.HIVE_ADDRESS, HiveContract, provider);
+
+    let calls_hornetInfo = [];
+    for (let index = 0; index < ids.length; index++) {
+        calls_hornetInfo.push({
+            address: addresses.HIVE_ADDRESS,
+            name: 'getHornetStatus',
+            params: [ids[index]*1, day]
+        });
+    }
+
+    const hornetInfos_temp = await multicall(HiveContract, calls_hornetInfo) as Array<any>;
+
+    let hornetsStatus = [];
+
+    for (let i = 0; i < hornetInfos_temp.length; i++) {
+        hornetsStatus.push(hornetInfos_temp[i][0]);
+    }
+
+    return hornetsStatus;
 };
 
 interface ILoadHiveDayDetails {
@@ -58,7 +88,14 @@ interface ILoadHiveDayDetails {
     networkID: Networks;
 }
 
-export const loadHiveDayDetails = async ({networkID, id}: ILoadHiveDayDetails) => {
+export interface IHiveDayInfo {
+    signedWorkers: number;
+    signedGuards: number;
+    yieldVenom: number;
+    defense: number;
+}
+
+export const loadHiveDayDetails = async ({networkID, id}: ILoadHiveDayDetails) : Promise<IHiveDayInfo[]> => {
     const addresses = getAddresses(networkID);
 
     let calls_hiveDayInfo = [];
@@ -78,9 +115,9 @@ export const loadHiveDayDetails = async ({networkID, id}: ILoadHiveDayDetails) =
         hiveDayInfos.push(hiveDayInfos_temp[i][0]);
     }
 
-    return {
-        hiveDayInfos: hiveDayInfos
-    };
+    console.log(hiveDayInfos)
+
+    return hiveDayInfos;
 }
 
 interface ILoadAttackInfoDetails {

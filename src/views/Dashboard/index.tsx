@@ -11,7 +11,7 @@ import { IAppSlice } from "src/store/slices/app-slice";
 // import { loadAccountDetails } from "src/store/slices/search-slice";
 import HiveCard from "src/components/HiveCard";
 import TxModal from "src/components/TxModal";
-import TigerModal from "src/components/TigerModal";
+import TigerModal from "src/components/HiveModal";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { DEFAULD_NETWORK, RPC_URL } from "src/constants";
 import { range } from "lodash";

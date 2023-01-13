@@ -1,11 +1,17 @@
 .tm-poper {
-    // max-width: 403px !important;
-    width: 100%;
+    max-width: 900px !important;
+    width: 90%;
 
     .tm-wallet{
         display: flex;
         justify-content: center;
         padding: 30px 0;
+    }
+
+    .cross-wrap{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .tm-title {
@@ -29,7 +35,21 @@
             .tm-image-section{
                 text-align: center;
             }
+            .hexagon-number{
+                // font-style: italic;
+                position: absolute;
+                color: white;
+                text-transform: uppercase;
+                line-height: 0.876;
+                text-align: center;
+                font-size: 100px;
+                left: 25%;
+                top: 9%;
+                transform: translate(-50%, -50%);
+                z-index: 3;
+              }
             .tm-summary-section{
+                display: flex;
                 .tm-description{
 
                 }
@@ -53,6 +73,7 @@
                         border-bottom: #FFFFFF;
                     }
                     .tm-properties-item{
+                        position: relative;
                         border: 1px solid white;
                         border-radius: 10px;
                         text-align: center;
@@ -70,6 +91,21 @@
                             font-weight: 600;
                             font-size: 16px;
                             color: #FFFFFF;
+                        }
+                        .tm-interact-action{
+                            background-color: #00ff22;
+                        }
+                        .workBadge{
+                            position: absolute;
+                            left: 75%;
+                            top: 75%;
+                            width: 40px;
+                        }
+                        .guardBadge{
+                            position: absolute;
+                            left: 75%;
+                            top: 75%;
+                            width: 40px;
                         }
                     }
                 }

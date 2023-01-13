@@ -61,10 +61,12 @@ export const loadAppDetails = createAsyncThunk(
         for (let index = 0; index < 20; index++) {
             hiveInfos.push(hiveInfos_temp[index][0]);
             const temp = await loadHornetsDetails({networkID, provider, ids: hiveInfos_temp[index][0].hornets? hiveInfos_temp[index][0].hornets : []});
-            allHornetInfos.push(temp.hornetInfos);
+            allHornetInfos.push(temp);
         }
 
         const staticHealth = await hiveContract.staticHealth();
+
+        console.log(hiveInfos)
 
         return {
             loading,

@@ -4,7 +4,7 @@ import { ReactComponent as XIcon } from "src/assets/icons/x.svg";
 import GifIcon from "src/assets/icons/nft_large.gif";
 import { Box, Modal, Paper, Grid, SvgIcon, IconButton, Link, OutlinedInput, InputAdornment, InputLabel, MenuItem, FormHelperText, FormControl, Select } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import "./tigermodal.scss";
+import "./hivemodal.scss";
 import { Skeleton } from "@material-ui/lab";
 import ConnectMenu from "src/components/Header/connect-button";
 import { shorten, sleep, trim } from "src/helpers";
@@ -12,27 +12,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { IReduxState } from "src/store/slices/state.interface";
 import { AttackHive, StakeHive, ContributeItems, ActionHive } from "src/store/slices/nft-thunk";
 import { IPendingTxn, isPendingTxn, txnButtonText } from "src/store/slices/pending-txns-slice";
-import { loadHornetsDetails, loadHiveDayDetails, loadAttackInfoDetails, loadInvaderInfoDetails, getYeildFromHornets } from "src/store/slices/search-slice";
+import { loadHornetsDetails, loadHiveDayDetails, loadAttackInfoDetails, loadInvaderInfoDetails, getYeildFromHornets, IHornet, IHiveDayInfo } from "src/store/slices/search-slice";
 // import { INftInfoDetails } from "src/store/slices/account-slice";
 import { useWeb3Context } from "src/hooks";
 import { warning } from "src/store/slices/messages-slice";
 import { messages } from "src/constants/messages";
-import { ETH_ADDRESSES, Networks, INVITE_LINK, OPENSEA_ITEM_URL, ETHSCAN_URL, DEFAULD_NETWORK } from "src/constants";
+import { ETH_ADDRESSES, Networks, INVITE_LINK, OPENSEA_ITEM_URL, ETHSCAN_URL, DEFAULD_NETWORK, HORNET_META_IMAGE } from "src/constants";
 import { utils } from "ethers";
-import { String } from "lodash";
+import { String, range } from "lodash";
 import CmlIcon from "src/assets/icons/token.png";
 import UsdcIcon from "src/assets/icons/usdt.png";
 import CopyLinkIcon from "src/assets/icons/copylink.png";
 import OwnerBadge from "src/assets/icons/owner-badge.png";
 import OpenseaIcon from "src/assets/icons/opensea.png";
+import WorkBadge from "src/assets/images/venom.png";
+import GuardBadge from "src/assets/images/protect.png";
+import HiveImage from "src/assets/images/hive.png";
+import { IHiveInfo } from "src/store/slices/app-slice";
+import { IUserInfo } from "src/store/slices/account-slice";
 
-interface ITigerProps {
+interface IHiveProps {
     open: boolean;
     handleClose: () => void;
-    nftId: string;
+    hid: string;
+    dayInfo: IHiveDayInfo[];
+    myHornets: IHornet[];
+    myHornetsStatus: number[];
 }
 
-function TigerModal({ open, handleClose, nftId }: ITigerProps) {
+function HiveModal({ open, handleClose, hid, dayInfo, myHornets, myHornetsStatus }: IHiveProps) {
     const { provider, address, chainID, providerChainID, checkWrongNetwork } = useWeb3Context();
     const dispatch = useDispatch();
 
@@ -49,106 +57,49 @@ function TigerModal({ open, handleClose, nftId }: ITigerProps) {
         return state.pendingTransactions;
     });
 
-    // const cmlPrice = useSelector<IReduxState, number>(state => {
-    //     return state.app.cmlPrice;
-    // });
+    const isAccountLoading = useSelector<IReduxState, boolean>(state => state.account.loading);
 
-    // const compoundDelay = useSelector<IReduxState, number>(state => {
-    //     return state.app.compoundDelay;
-    // });
+    const hiveInfo = useSelector<IReduxState, IHiveInfo>(state => {
+        return state.app.hiveInfos[parseInt(hid)];
+    });
 
-    // const apeuBalance = useSelector<IReduxState, string>(state => {
-    //     return state.account.balances && state.account.balances.cml;
-    // });
+    const hornetsInfo = useSelector<IReduxState, IHornet[]>(state => {
+        return state.app.allHornetInfos[parseInt(hid)];
+    });
 
-    // const [quantity, setQuantity] = useState<string>("");
-    // const [name, setName] = useState<string>("");
+    const userInfo = useSelector<IReduxState, IUserInfo[]>(state => {
+        return state.account.userInfos;
+    });
 
-    // const getMyInfo = () => {
-    //     return nfts.length == 0 ? undefined : nfts[0].supporters.find(user => user.address == address);
+    const onMint = async (tag: boolean, hornet: number) => {
+        if (await checkWrongNetwork()) return;
+        dispatch(ActionHive({ hid: parseInt(hid), hornet, tag, provider, networkID: chainID, handleClose: () => {} }));
+    };
+
+    // const hornets = !isAccountLoading && loadHornetsDetails({networkID: chainID, provider, ids: userInfo[parseInt(hid)].hornets}) as unknown as IHornet[];
+    // console.log(hornets)
+
+    // let workers = [];
+    // let guarders = [];
+
+    // for (let index = 0; index < hornetsInfo.length; index++) {
+    //     if (hornetsInfo[index].status == 1) {workers.push(hornetsInfo[index]);}
+    //     if (hornetsInfo[index].status == 2) {guarders.push(hornetsInfo[index]);}
     // }
 
-    // const getMyAmount = () => {
-    //     const myAmount = getMyInfo()?.amount;
-    //     return myAmount? Math.floor(myAmount) / Math.pow(10, 18): 0;
-    // }
+    const passed = Math.floor((Math.floor(Date.now() / 1000) - hiveInfo.startTime) / 86400);
 
-    // const getPassedTime = () => {
-    //     const myLastTime = getMyInfo()?.lastProcessingTimestamp;
-    //     return myLastTime? Math.floor(Date.now() / 1000) - myLastTime : compoundDelay;
-    // }
+    // const today = passed == 0? 0 : passed - 1;
 
-    // const getNftTimeLeft = () => {
-    //     const timestamp = compoundDelay*1 + nftLastTimeStamp - Math.floor(Date.now() / 1000);
-    //     return timestamp <= 0 ? 0 : timestamp;
-    // };
-
-    // const getOverTime = (time: number) => {
-    //     return time <= 0 ? 0 : time;
-    // }
-
-    // const [timeLeft, setTimeLeft] = useState(getOverTime(compoundDelay - getPassedTime()));
-    // const [giftTimeLeft, setGiftTimeLeft] = useState(getNftTimeLeft());
-
-    // useEffect(() => {
-    //     let timer = setInterval(() => {
-    //         setTimeLeft(getOverTime(compoundDelay - getPassedTime()));
-    //         setGiftTimeLeft(getNftTimeLeft());
-    //     }, 1000);
-    //     return () => clearInterval(timer);
-    // });
-
-    // const LoadIdDetails = async () => {
-    //     const data = await loadIdDetails({ networkID: chainID, id: nftId });
-    //     setNfts(data.nfts)
-    // }
-
-    // if (nftId != "") {
-    //     LoadIdDetails();
-    // }
-
-    // // useEffect(() => {
-    // //     let timer1 = setInterval(() => {
-    // //         LoadIdDetails();
-    // //     }, 5000);
-    // //     return () => clearInterval(timer1);
-    // // });
-
-    // const onTransfer = async () => {
-    //     if (await checkWrongNetwork()) return;
-    //     dispatch(transferNft({ tokenId: nftId, to: name, provider, address, networkID: chainID, handleClose: () => {} }));
-    // };
-
-    // const onStake = async () => {
-    //     if (await checkWrongNetwork()) return;
-    //     dispatch(upgradeNft({ id: nftId, quantity, provider, address, networkID: chainID, handleClose: () => {} }));
-    // };
-
-    // const onClaim = async (swapping: number) => {
-    //     if (await checkWrongNetwork()) return;
-    //     dispatch(cashoutReward({ nftId, swapping, provider, address, networkID: chainID }));
-    // };
-
-    // const onCompound = async () => {
-    //     if (await checkWrongNetwork()) return;
-    //     dispatch(compoundReward({ nftId, provider, address, networkID: chainID }));
-    // };
-
-    // const setMaxQuantity = () => {
-    //     setQuantity(apeuBalance);
-    // };
-
-    // const Clipboard = () => {
-    //     navigator.clipboard.writeText(`${INVITE_LINK}${nftId}`);
-    // }
+    console.log(dayInfo[passed])
 
     return (
         <Modal id="hades" open={open} onClose={handleClose} hideBackdrop>
             <div className="hades-container">
-                <Paper className="ohm-card tm-popover tm-poper">
+                <Paper className="ohm-card ohm-popover tm-popover tm-poper">
                     <div className="cross-wrap">
                         <div className="tm-title">
-                            {/* <p>CTNC #{nft.id}</p> */}
+                            <p>Hive #{parseInt(hid) + 1}</p>
                         </div>
                         <IconButton onClick={handleClose}>
                             <SvgIcon color="primary" component={XIcon} />
@@ -156,107 +107,108 @@ function TigerModal({ open, handleClose, nftId }: ITigerProps) {
                     </div>
                     <Grid className="tm-wrapper" container spacing={4}>
                         <Grid className="tm-summary" item lg={6} md={6} sm={12} xs={12}>
-                            {/* {nfts.length != 0 && nfts[0].owner == address && <div className="owner-badge"><img width="70" src={OwnerBadge} /></div>}
+                            {/* {nfts.length != 0 && nfts[0].owner == address && <div className="owner-badge"><img width="70" src={OwnerBadge} /></div>} */}
                             <div className="tm-image-section">
-                                <img src={imageUrl} width="90%" />
-                            </div> */}
+                                <img src={HiveImage} width="60%" />
+                                <h2 className="hexagon-number">{parseInt(hid)+1}</h2>
+                            </div>
                             <div className="tm-summary-section">
                                 <div className="tm-properties">
                                     <div className="tm-properties-title">
-                                        <p>Properties</p>
+                                        <p>Staked Hornets</p>
                                     </div>
                                     <Grid className="tm-properties-container" container spacing={3}>
-                                        {/* {nfts.length != 0 && nfts[0].attributes.map(attr => (
-                                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                        {hiveInfo.hornets.length != 0 && hornetsInfo.map(attr => (
+                                            <Grid item lg={3} md={3} sm={3} xs={3}>
                                                 <div className="tm-properties-item">
-                                                    <p className="tm-properties-type">{attr.trait_type}</p>
-                                                    <p className="tm-properties-value">{attr.value}</p>
+                                                    <img src={`${HORNET_META_IMAGE + attr.id}.png`} width="100%" />
                                                 </div>
                                             </Grid>
-                                        ))} */}
+                                        ))}
                                     </Grid>
                                 </div>
                             </div>
-                            <div className="tm-details-section-2">
-                                <div className="tm-referral-title">
-                                    <p>Your NFT Link</p>
-                                </div>
-                                <div className="tm-referral">
-                                    {/* <OutlinedInput
-                                        className="referral-link"
-                                        value={`${INVITE_LINK}${nftId}`}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <div className="referral-link-btn" onClick={Clipboard}>
-                                                    <img src={CopyLinkIcon} width="20px" />
+                            <div className="tm-summary-section">
+                                <div className="tm-properties">
+                                    <div className="tm-properties-title">
+                                        <p>Your Hornets</p>
+                                    </div>
+                                    <Grid className="tm-properties-container" container spacing={3}>
+                                        {!isAccountLoading && range(myHornets.length).map(attr => (
+                                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                                <div className="tm-properties-item">
+                                                    <img src={`${HORNET_META_IMAGE + myHornets[attr].id}.png`} width="100%" />
+                                                    {myHornetsStatus[attr] == 1 && <img src={WorkBadge} className="workBadge" width="100%" />}
+                                                    {myHornetsStatus[attr] == 2 && <img src={GuardBadge} className="guardBadge" width="100%" />}
+                                                    {myHornetsStatus[attr] == 0 && <div className="tm-interact-action" onClick={() => onMint(true, myHornets[attr].id)}>
+                                                        <p>Harvest</p>
+                                                    </div>}
+                                                    {myHornetsStatus[attr] == 0 && <div className="tm-interact-action" onClick={() => onMint(false, myHornets[attr].id)}>
+                                                        <p>Protect</p>
+                                                    </div>}
                                                 </div>
-                                            </InputAdornment>
-                                        }
-                                    /> */}
+                                            </Grid>
+                                        ))}
+                                    </Grid>
                                 </div>
-                                <div className="referral-footer">
+                                {/* <div className="referral-footer">
                                     <p>If you are owner of the NFT,<br/>promote your NFT and get 10%.</p>
-                                </div>
+                                </div> */}
                             </div>
                         </Grid>
                         <Grid className="tm-main" item lg={6} md={6} sm={12} xs={12}>
                             <div className="tm-details">
                                 <div className="tm-details-section-1">
                                     <div className="tm-details-item tm-space">
-                                        <p className="tm-details-title">CTNC #{nftId}</p>
+                                        <p className="tm-details-title">Hive #{parseInt(hid + 1)}</p>
                                         {/* <Link href={`${OPENSEA_ITEM_URL}${ETH_ADDRESSES.NFT_MANAGER}/${nftId.toString()}`} target="_blank">
                                             <img src={OpenseaIcon} width="40px" />
                                         </Link> */}
                                     </div>
                                     <div className="tm-details-item">
-                                        <p className="tm-details-type">Owned by&nbsp;</p>
-                                        {/* {nfts.length != 0 && <Link href={`${ETHSCAN_URL}${nfts[0].owner}`} target="_blank">
+                                        <p className="tm-details-type">Total Hornets:&nbsp;</p>
+                                        {/* {hiveInfo.hornets.length != 0 &&  */}
                                             <div className="tm-details-value">
-                                                <p className="tm-details-value-cml">{nfts[0].owner == address ? "YOU" : shorten(nfts[0].owner)}</p>
+                                                <p className="tm-details-value-cml">{hiveInfo.hornets.length}</p>
                                             </div>
-                                        </Link>} */}
                                     </div>
                                     <div className="tm-details-item">
-                                        <p className="tm-details-type">Total Staked Value:&nbsp;</p>
+                                        <p className="tm-details-type">Today's Workers:&nbsp;</p>
                                         <div className="tm-details-value">
-                                            {/* <p className="tm-details-value-cml">{nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].amount))} $CML</p>
-                                            <p className="tm-details-value-usd">( ${nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].amount * cmlPrice))} )</p> */}
+                                            <p className="tm-details-value-cml">{dayInfo[passed] == undefined? 0 : dayInfo[passed].signedWorkers*1}</p>
+                                            {/* <p className="tm-details-value-usd">( ${nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].amount * cmlPrice))} )</p> */}
                                         </div>
                                     </div>
                                     <div className="tm-details-item">
-                                        <p className="tm-details-type">Total Stakers:&nbsp;</p>
+                                        <p className="tm-details-type">Today's Guards:&nbsp;</p>
                                         <div className="tm-details-value">
-                                            {/* <p className="tm-details-value-cml">{nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].supporters.length))}</p> */}
+                                            <p className="tm-details-value-cml">{dayInfo[passed] == undefined? 0 : dayInfo[passed].signedGuards*1}</p>
                                         </div>
                                     </div>
                                     <div className="tm-details-item">
-                                        <p className="tm-details-type">Gift Value:&nbsp;</p>
+                                        <p className="tm-details-type">Total Yields:&nbsp;</p>
                                         <div className="tm-details-value">
-                                            {/* <p className="tm-details-value-cml">{nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].supportValue))} $CML</p>
-                                            <p className="tm-details-value-usd">( ${nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].supportValue * cmlPrice))} )</p> */}
+                                            <p className="tm-details-value-cml">{hiveInfo.yieldVenom / 10**18}</p>
                                         </div>
                                     </div>
-                                    <div className="tm-details-item tm-details-divider">
-                                        <p className="tm-details-type">Total Reward Per Day:&nbsp;</p>
+                                    {/* <div className="tm-details-item tm-details-divider">
+                                        <p className="tm-details-type">Defense:&nbsp;</p>
                                         <div className="tm-details-value">
-                                            {/* <p className="tm-details-value-cml">{nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].rewardPerDay))} $CML</p>
-                                            <p className="tm-details-value-usd">( ${nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(nfts[0].rewardPerDay * cmlPrice))} )</p> */}
+                                            <p className="tm-details-value-cml">{dayInfo[today].defense}</p>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="tm-details-item">
-                                        <p className="tm-details-type">Your Staked Value:&nbsp;</p>
+                                        <p className="tm-details-type">Health:&nbsp;</p>
                                         <div className="tm-details-value">
-                                            {/* <p className="tm-details-value-cml">{nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(getMyAmount()))} $CML</p>
-                                            <p className="tm-details-value-usd">( ${nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(getMyAmount() * cmlPrice))} )</p> */}
+                                            <p className="tm-details-value-cml">{hiveInfo.health / 10**3}</p>
                                         </div>
                                     </div>
-                                    <div className="tm-details-item">
+                                    {/* <div className="tm-details-item">
                                         <p className="tm-details-type">Your Pending Reward:&nbsp;</p>
                                         <div className="tm-details-value">
-                                            {/* <p className="tm-details-value-cml">{nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(getMyAmount() * getPassedTime() * 34724 / 1e11))} $CML</p>
-                                            <p className="tm-details-value-usd">( ${nfts.length != 0 && new Intl.NumberFormat("en-US").format(Math.floor(getMyAmount() * getPassedTime() * 34724 / 1e11 * cmlPrice))} )</p> */}
+                                            <p className="tm-details-value-cml">{!isAccountLoading? hiveInfo.yieldVenom / hiveInfo.hornets.length * userInfo[parseInt(hid)].hornets.length / 10**18 : 0}</p>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="tm-interact">
@@ -310,9 +262,9 @@ function TigerModal({ open, handleClose, nftId }: ITigerProps) {
                                     {/* <div className="tm-interact-warning">
                                         <p>You have to wait for Public-Sale.</p>
                                     </div> */}
-                                    <div className="tm-interact-item-wrapper">
+                                    {/* <div className="tm-interact-item-wrapper">
                                         <p className="tm-interact-type">Stake $CML</p>
-                                        {/* {address && DEFAULD_NETWORK == providerChainID ?
+                                        {address && DEFAULD_NETWORK == providerChainID ?
                                         timeLeft <= 0 ? 
                                         pendingTransactions.length > 0 ? 
                                         <div className="tm-interact-action">
@@ -325,16 +277,16 @@ function TigerModal({ open, handleClose, nftId }: ITigerProps) {
                                         <div className="tm-interact-action disabled">
                                             <p>{new Date(timeLeft * 1000).toISOString().substring(11, 19)}</p>
                                         </div> :
-                                        <div className="txmodal-wallet"><ConnectMenu /></div>} */}
-                                        {/* <div className="tm-interact-action disabled">
+                                        <div className="txmodal-wallet"><ConnectMenu /></div>}
+                                        <div className="tm-interact-action disabled">
                                             <p>Coming</p>
-                                        </div> */}
-                                    </div>
+                                        </div>
+                                    </div> */}
                                 </div>
                                 <div className="tm-interact-item">
                                     <div className="tm-interact-item-wrapper no-margin">
                                         <div className="tm-interact-item-1">
-                                            <p className="tm-interact-type">Claim NFT Gift</p>
+                                            {/* <p className="tm-interact-type">Claim NFT Gift</p> */}
                                             {/* <div className="tm-interact-wrapper">
                                                 {nfts.length != 0 && address == nfts[0].owner ? 
                                                 nfts.length != 0 && nfts[0].supportValue > 0 ?
@@ -377,7 +329,7 @@ function TigerModal({ open, handleClose, nftId }: ITigerProps) {
                                             </div> */}
                                         </div>
                                         <div className="tm-interact-item-2">
-                                            <p className="tm-interact-type">Claim Rewards</p>
+                                            {/* <p className="tm-interact-type">Claim Rewards</p> */}
                                             {/* <div className="tm-interact-wrapper">
                                                 {getMyAmount() > 0 ?
                                                 timeLeft <= 0 ? 
@@ -455,4 +407,4 @@ function TigerModal({ open, handleClose, nftId }: ITigerProps) {
     );
 }
 
-export default TigerModal;
+export default HiveModal;

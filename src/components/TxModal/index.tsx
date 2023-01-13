@@ -1,23 +1,16 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import { ReactComponent as XIcon } from "src/assets/icons/x.svg";
-import GifIcon from "src/assets/icons/nft_large.gif";
-import { Box, Modal, Paper, SvgIcon, IconButton, OutlinedInput, InputAdornment, InputLabel, MenuItem, FormHelperText, FormControl, Select, FormGroup, FormControlLabel, Checkbox, Chip } from "@material-ui/core";
+import { Box, Modal, Paper, SvgIcon, IconButton, OutlinedInput, InputAdornment, InputLabel, MenuItem, FormControl, Select, FormGroup, FormControlLabel, Checkbox, Chip } from "@material-ui/core";
 import "./txmodal.scss";
-import { Skeleton } from "@material-ui/lab";
-import { Theme, useTheme, makeStyles, RadioGroup, Radio, Input, FormLabel } from "@material-ui/core";
+import { useTheme, makeStyles, RadioGroup, Radio, Input } from "@material-ui/core";
 import ConnectMenu from "src/components/Header/connect-button";
-import { shorten, sleep, trim } from "src/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { IReduxState } from "src/store/slices/state.interface";
-import { AttackHive, ActionHive, StakeHive, ContributeItems } from "src/store/slices/nft-thunk";
+import { AttackHive, StakeHive, ContributeItems } from "src/store/slices/nft-thunk";
 import { IPendingTxn, isPendingTxn, txnButtonText } from "src/store/slices/pending-txns-slice";
-import { loadHiveDayDetails, loadInvaderInfoDetails, InvaderInterface } from "src/store/slices/search-slice";
+import { loadInvaderInfoDetails, InvaderInterface } from "src/store/slices/search-slice";
 import { useWeb3Context } from "src/hooks";
-import { warning } from "src/store/slices/messages-slice";
-import { messages } from "src/constants/messages";
 import { DEFAULD_NETWORK } from "src/constants";
-import { utils } from "ethers";
-import { String } from "lodash";
 
 interface ITxProps {
     open: boolean;
@@ -109,7 +102,7 @@ function TxModal({ open, handleClose, filter, hid }: ITxProps) {
         if (data.invaderInfos[0].status == 0) {
             setInvaderStatus(0);
         } else {
-            setInvaderStatus(passed);
+            setInvaderStatus(86400 - passed);
         }
         setLoading(false);
     };
@@ -284,6 +277,10 @@ function TxModal({ open, handleClose, filter, hid }: ITxProps) {
         }
     };
 
+    if (pendingTransactions && pendingTransactions.length > 0) {
+        buttonText = `${pendingTransactions.length} Pending `;
+    }
+
     return (
         <Modal id="hades" open={open} onClose={handleClose} hideBackdrop>
             <div className="hades-container">
@@ -315,7 +312,7 @@ function TxModal({ open, handleClose, filter, hid }: ITxProps) {
                                                     <MenuItem key={item*1} value={item*1}>Animus #{item*1}</MenuItem>
                                                 ))}
                                             </Select>
-                                            {invaderStatus > 0 && <p>You should wait {invaderStatus} seconds</p>}
+                                            {invaderStatus > 0 && <p className="txmodal-invader-wait-text">You should wait {invaderStatus} seconds</p>}
                                         </FormControl>
                                         <FormGroup>
                                             <FormControlLabel control={<Checkbox onChange={e => setAVP(e.target.checked)}/>} label="Use Anti-Venom Plating" />
@@ -436,7 +433,7 @@ function TxModal({ open, handleClose, filter, hid }: ITxProps) {
                                         />
                                     </>
                                 )}
-                                <div
+                                {invaderStatus == 0 && <div
                                     className="txmodal-header-token-select-btn"
                                     onClick={async () => {
                                         if (isPendingTxn(pendingTransactions, "pending...")) return;
@@ -444,7 +441,12 @@ function TxModal({ open, handleClose, filter, hid }: ITxProps) {
                                     }}
                                 >
                                     <p>{txnButtonText(pendingTransactions, "", buttonText)}</p>
-                                </div>
+                                </div>}
+                                {invaderStatus > 0 && <div
+                                    className="txmodal-header-token-select-btn"
+                                >
+                                    <p>{buttonText}</p>
+                                </div>}
                             </div>
                         </div>
                     </Box>}

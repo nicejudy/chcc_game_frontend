@@ -47,7 +47,7 @@
         text-align: center;
         font-size: 80px;
         left: 50%;
-        top: 4%;
+        top: 3%;
         transform: translate(-50%, -50%);
         z-index: 3;
       }
@@ -65,6 +65,7 @@
       height: 282px;
       .card-btn-join{
         margin-top: -19px;
+        cursor: pointer;
       }
       .card-btn-join-text{
         position: absolute;
@@ -77,6 +78,7 @@
         left: 103px;
         top: 170px;
         margin: 10px 0;
+        cursor: pointer;
       }
       .card-btn-attack-text{
         position: absolute;
@@ -89,6 +91,7 @@
         left: 83px;
         top: 223px;
         margin: 10px 0;
+        cursor: pointer;
       }
       .card-health-text{
         text-transform: uppercase;
@@ -160,6 +163,7 @@
         top: 573px;
         color: #333;
         margin: 10px 0;
+        cursor: pointer;
       }
       .card-toxic-text{
         color: rgba(255, 166, 0, 0.94);
@@ -188,6 +192,7 @@
         top: 733px;
         color: #333;
         margin: 10px 0;
+        cursor: pointer;
       }
       .card-toxic-progress{
         position: absolute;

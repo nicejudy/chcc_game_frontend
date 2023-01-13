@@ -1,3 +1,54 @@
+#hades {
+    position: absolute;
+    z-index: 1300 !important;
+    overflow-y: scroll;
+    
+  
+    @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      background-color: #55555555;
+    }
+  
+    /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
+    @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .hades-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: calc(20vh);
+        margin-bottom: calc(20vh);
+      
+        .ohm-popover {
+        //   max-width: 500px;
+          display: flex;
+          flex-direction: column;
+      
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(100px);
+      
+          padding: 20px;
+          border-radius: 10px;
+      
+          h3 {
+            align-self: center;
+            justify-self: center;
+            width: 75%;
+            text-align: center;
+          }
+        //   label {
+        //     margin: 20px 10px 4px 10px;
+        //   }
+          .help-text {
+            margin: 10px;
+          }
+        }
+    }
+}
+
 .view-base-root {
     height: 100vh;
     // width: 100vw;
