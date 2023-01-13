@@ -27,6 +27,7 @@
         display: flex;
         flex-direction: row;
         .tm-summary{
+            position: relative;
             .owner-badge{
                 position: absolute;
                 left: 39px;
@@ -43,8 +44,8 @@
                 line-height: 0.876;
                 text-align: center;
                 font-size: 100px;
-                left: 25%;
-                top: 9%;
+                left: 50%;
+                top: 7%;
                 transform: translate(-50%, -50%);
                 z-index: 3;
               }
